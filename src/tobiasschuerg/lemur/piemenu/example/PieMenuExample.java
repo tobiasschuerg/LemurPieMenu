@@ -4,8 +4,11 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.simsilica.lemur.Checkbox;
 import com.simsilica.lemur.Container;
@@ -14,7 +17,11 @@ import com.simsilica.lemur.Label;
 import com.simsilica.lemur.LayerComparator;
 import com.simsilica.lemur.Panel;
 import com.simsilica.lemur.Slider;
+import com.simsilica.lemur.component.DynamicInsetsComponent;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
+import com.simsilica.lemur.component.TbtQuadBackgroundComponent;
+import com.simsilica.lemur.event.CursorEventControl;
+import com.simsilica.lemur.event.DragHandler;
 import com.simsilica.lemur.event.MouseEventControl;
 import com.simsilica.lemur.style.ElementId;
 import com.simsilica.lemur.style.Styles;
@@ -27,7 +34,7 @@ import tobiasschuerg.lemur.piemenu.SpatialSelectionListener;
  * @author normenhansen
  */
 public class PieMenuExample extends SimpleApplication {
-
+    
     public static void main(String[] args) {
         PieMenuExample app = new PieMenuExample();
         app.start();
@@ -79,10 +86,7 @@ public class PieMenuExample extends SimpleApplication {
 
         temp = panel.addChild( new Checkbox( "Show FPS" ) );
         temp.setChecked(true);
-
-
-        // Custom "spacer" element type
-        hudPanel.addChild( new Panel( 10f, 10f, new ElementId("spacer"), "glass" ) );
+      
         
 
         Box b = new Box(1, 1, 1);
@@ -97,12 +101,13 @@ public class PieMenuExample extends SimpleApplication {
         PieMenu pieMenu = new PieMenu(); // create a new pieMenu
         getStateManager().attach(pieMenu); // attach to get access to the update loop
         MouseEventControl.addListenersToSpatial(geom, pieMenu); // add menu to spatial
+        rootNode.attachChild(pieMenu.menu);
         
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-     
+
     }
 
     @Override

@@ -38,7 +38,7 @@ public abstract class SpatialSelectionListener extends DefaultMouseListener impl
     protected void click(MouseButtonEvent event, Spatial target, Spatial capture) {
         Material m = ((Geometry) target).getMaterial();
         m.setColor("Color", ColorRGBA.Red);
-        onSpatialSelected(target);
+        onSpatialSelected(target);        
     }
 
     @Override

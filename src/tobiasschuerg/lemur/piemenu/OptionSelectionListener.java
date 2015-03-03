@@ -8,6 +8,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.MouseInput;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
@@ -21,12 +22,11 @@ import java.util.List;
  *
  * @author Tobias
  */
-public class OptionSelectionListener extends DefaultCursorListener implements AppState{
+public class OptionSelectionListener extends DefaultCursorListener implements AppState {
 
     private final PieMenu pieMenu;
     private boolean isOptionSelected;
-    
-        /**
+    /**
      * <code>initialized</code> is set to true when the method
      * {@link AbstractAppState#initialize(com.jme3.app.state.AppStateManager, com.jme3.app.Application) }
      * is called. When {@link AbstractAppState#cleanup() } is called,
@@ -41,16 +41,16 @@ public class OptionSelectionListener extends DefaultCursorListener implements Ap
         this.pieMenu = menu;
         isOptionSelected = false;
     }
-    
-    @Override
-    public void cursorButtonEvent( CursorButtonEvent event, Spatial target, Spatial capture ) {
-        if( event.getButtonIndex() != MouseInput.BUTTON_LEFT )
-            return;
 
-        if( event.isPressed() ) {
-            System.out.println("RAYCAST");
-        } else {
-            System.out.println("SELECTION");
+    @Override
+    public void cursorButtonEvent(CursorButtonEvent event, Spatial target, Spatial capture) {
+        if (event.getButtonIndex() != MouseInput.BUTTON_LEFT) {
+            return;
+        }
+
+        if (!event.isPressed()) {
+            System.out.println("Selected: " + closest.getName());
+            pieMenu.close();
         }
     }
 
@@ -58,6 +58,12 @@ public class OptionSelectionListener extends DefaultCursorListener implements Ap
     public void cursorMoved(CursorMotionEvent event, Spatial target, Spatial capture) {
         Vector3f point = event.getCollision().getContactPoint();
         Geometry closest = findClosestOption(point);
+        closest.getMaterial().setColor("Color", ColorRGBA.randomColor());
+    }
+
+    @Override
+    public void cursorExited(CursorMotionEvent event, Spatial target, Spatial capture) {
+       pieMenu.close();
     }
     
     
@@ -68,11 +74,11 @@ public class OptionSelectionListener extends DefaultCursorListener implements Ap
             isOptionSelected = true;
             System.out.println("Selected: " + spatial.getName());
             // onOptionSelected();
-            pieMenu.removeOptions();
+            pieMenu.close();
         }
     }
 
-        public void initialize(AppStateManager stateManager, Application app) {
+    public void initialize(AppStateManager stateManager, Application app) {
         initialized = true;
         this.app = app;
     }
@@ -96,7 +102,6 @@ public class OptionSelectionListener extends DefaultCursorListener implements Ap
     }
 
     public void update(float tpf) {
- 
     }
 
     public void render(RenderManager rm) {
@@ -108,23 +113,20 @@ public class OptionSelectionListener extends DefaultCursorListener implements Ap
     public void cleanup() {
         initialized = false;
     }
-    
     private Geometry closest;
 
     private Geometry findClosestOption(Vector3f point) {
         List<Geometry> options = pieMenu.getOptions();
-        
+
         float closestDistance = 1000;
-        
+
         for (Geometry option : options) {
             float distance = point.distance(option.getWorldTranslation());
             if (closest == null || distance < closestDistance) {
                 closest = option;
                 closestDistance = distance;
-            }            
+            }
         }
-        System.out.println("Distance: " + closest.getName());
         return closest;
     }
-
 }
