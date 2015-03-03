@@ -4,6 +4,8 @@
  */
 package tobiasschuerg.lemur.piemenu;
 
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -26,6 +28,7 @@ public class PieMenu extends SpatialSelectionListener {
 
     private Spatial target;
     private List<Geometry> options = new ArrayList<Geometry>();
+    private List<BitmapText> texts = new ArrayList<BitmapText>();
     private float radius = 3f;
     private Geometry disk;
     public Node menu;
@@ -69,7 +72,9 @@ public class PieMenu extends SpatialSelectionListener {
         q.fromAngleAxis(degreesperoption, Vector3f.UNIT_X);
 
         for (int i = 0; i < count; i++) {
-            float length = 0.4f;
+            // Node option = new Node();
+
+            float length = 0.5f;
             Box b = new Box(length, length, length / 10);
             Geometry geom = new Geometry("Option" + i, b);
 
@@ -83,12 +88,23 @@ public class PieMenu extends SpatialSelectionListener {
             q.multLocal(positionVector);
             geom.move(positionVector);
 
-            menu.attachChild(geom);
-            options.add(geom);
+            BitmapFont guiFont = app.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+            BitmapText helloText = new BitmapText(guiFont, false);
+            helloText.setSize(0.2f);
+            helloText.setText(geom.getName());
+            //helloText.setVerticalAlignment(BitmapFont.VAlign.Center);
+            //helloText.setAlignment(BitmapFont.Align.Center);
+            helloText.setLocalTranslation(geom.getLocalTranslation().add(new Vector3f(-length, 0f, length)));
+
 
             //OptionSelectionListener optionSelectedListener = new OptionSelectionListener(this);
             //MouseEventControl.addListenersToSpatial(geom, optionSelectedListener);
             //app.getStateManager().attach(optionSelectedListener);
+            options.add(geom);
+            texts.add(helloText);
+            menu.attachChild(geom);
+            menu.attachChild(helloText);
+
         }
     }
 
@@ -104,6 +120,11 @@ public class PieMenu extends SpatialSelectionListener {
             option.removeFromParent();
         }
         options.clear();
+
+        for (BitmapText text : texts) {
+            text.removeFromParent();
+        }
+        texts.clear();
     }
 
     private void addSelectionPlane() {

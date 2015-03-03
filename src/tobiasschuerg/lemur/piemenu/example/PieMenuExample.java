@@ -61,7 +61,7 @@ public class PieMenuExample extends SimpleApplication {
         // we just configured above.
         Container hudPanel = new Container("glass");
         hudPanel.setLocalTranslation(5, cam.getHeight() - 20, 0);
-        guiNode.attachChild(hudPanel);
+        // TODO: temporary guiNode.attachChild(hudPanel);
 
         // Create a top panel for some stats toggles.
         Container panel = new Container("glass");
