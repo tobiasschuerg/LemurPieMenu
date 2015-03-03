@@ -49,7 +49,7 @@ public class PieMenu extends SpatialSelectionListener {
 
         if (!isSpacialShowing) {
             addSelectionPlane();
-            showOptions(3);
+            showOptions(9);
             isSpacialShowing = true;
         } else {
             close();
@@ -108,7 +108,7 @@ public class PieMenu extends SpatialSelectionListener {
 
     private void addSelectionPlane() {
         removeSelectionPlane();
-        Cylinder c = new Cylinder(8, 32, 5f, 0.01f, true);        
+        Cylinder c = new Cylinder(8, 32, 5f, 0.01f, true);
         disk = new Geometry("disk", c);
 
         Material mat = ((Geometry) target).getMaterial().clone();

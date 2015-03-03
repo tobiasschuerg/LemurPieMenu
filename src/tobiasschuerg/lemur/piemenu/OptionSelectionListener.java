@@ -63,10 +63,8 @@ public class OptionSelectionListener extends DefaultCursorListener implements Ap
 
     @Override
     public void cursorExited(CursorMotionEvent event, Spatial target, Spatial capture) {
-       pieMenu.close();
+        pieMenu.close();
     }
-    
-    
 
     // @Override
     public void onSpatialSelected(Spatial spatial) {
