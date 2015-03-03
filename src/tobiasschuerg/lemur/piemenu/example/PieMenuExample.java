@@ -1,4 +1,4 @@
-package mygame;
+package tobiasschuerg.lemur.piemenu.example;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
@@ -9,20 +9,23 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.event.MouseEventControl;
+import tobiasschuerg.lemur.piemenu.CameraMovementFunctions;
+import tobiasschuerg.lemur.piemenu.PieMenu;
+import tobiasschuerg.lemur.piemenu.SpatialSelectionListener;
 
 /**
  * test
  *
  * @author normenhansen
  */
-public class RadialMenuDemo extends SimpleApplication {
+public class PieMenuExample extends SimpleApplication {
 
     public static void main(String[] args) {
-        RadialMenuDemo app = new RadialMenuDemo();
+        PieMenuExample app = new PieMenuExample();
         app.start();
     }
 
-    public RadialMenuDemo() {
+    public PieMenuExample() {
         super(new StatsAppState());
 
     }
