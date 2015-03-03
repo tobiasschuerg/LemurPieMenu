@@ -31,7 +31,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package tobiasschuerg.lemur.piemenu;
+package tobiasschuerg.lemur.piemenu.example;
 
 import com.jme3.input.KeyInput;
 import com.simsilica.lemur.input.Axis;
@@ -39,17 +39,17 @@ import com.simsilica.lemur.input.Button;
 import com.simsilica.lemur.input.FunctionId;
 import com.simsilica.lemur.input.InputMapper;
 import com.simsilica.lemur.input.InputState;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.F_ELEVATE;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.F_MOVE;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.F_RUN;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.F_STRAFE;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.F_X_LOOK;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.F_Y_LOOK;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.GROUP_MOVEMENT;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.JOY_X_LOOK;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.JOY_Y_LOOK;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.MOUSE_X_LOOK;
-import static tobiasschuerg.lemur.piemenu.CameraMovementFunctions.MOUSE_Y_LOOK;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.F_ELEVATE;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.F_MOVE;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.F_RUN;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.F_STRAFE;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.F_X_LOOK;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.F_Y_LOOK;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.GROUP_MOVEMENT;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.JOY_X_LOOK;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.JOY_Y_LOOK;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.MOUSE_X_LOOK;
+import static tobiasschuerg.lemur.piemenu.example.CameraMovementFunctions.MOUSE_Y_LOOK;
 
 /**
  * The shared FunctionIds for camera movement input and some default input
