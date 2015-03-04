@@ -4,6 +4,8 @@
  */
 package tobiasschuerg.lemur.piemenu;
 
+import com.jme3.app.Application;
+import com.jme3.app.state.AbstractAppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
@@ -16,15 +18,19 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Cylinder;
+import com.jme3.texture.Texture;
 import com.simsilica.lemur.event.CursorEventControl;
+import com.simsilica.lemur.event.MouseEventControl;
+import com.simsilica.lemur.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+import tobiasschuerg.lemur.piemenu.example.PieMenuExample;
 
 /**
  *
  * @author Tobias
  */
-public class PieMenu extends SpatialSelectionListener {
+public class PieMenu extends AbstractAppState {
 
     private Spatial target;
     private List<Geometry> options = new ArrayList<Geometry>();
@@ -32,10 +38,30 @@ public class PieMenu extends SpatialSelectionListener {
     private float radius = 3f;
     private Geometry disk;
     public Node menu;
-    private boolean isSpacialShowing;
+    private boolean areOptionsShowing = false;
+    private final Application app;
+    private final SpatialSelectionListener selectionListener;
 
-    public PieMenu() {
+    public PieMenu(Application app, Spatial spatial) {
+        this.app = app;
         menu = new Node("pie menu");
+        selectionListener = new SpatialSelectionListener() {
+            @Override
+            public void onSpatialSelected(Spatial spatial) {
+
+                if (!areOptionsShowing) {                    
+                    showOptions();
+                    addSelectionPlane();
+                    areOptionsShowing = true;
+                } else {
+                    close();
+                }
+
+            }
+        };
+
+        app.getStateManager().attach(this); // attach to get access to the update loop    
+        MouseEventControl.addListenersToSpatial(spatial, selectionListener); // add menu to spatial
     }
 
     @Override
@@ -44,101 +70,52 @@ public class PieMenu extends SpatialSelectionListener {
         menu.lookAt(app.getCamera().getLocation(), app.getCamera().getUp());
     }
 
-    @Override
-    public void onSpatialSelected(Spatial spatial) {
-        this.target = spatial;
-        Material m = ((Geometry) spatial).getMaterial();
-        m.setColor("Color", ColorRGBA.Red);
-
-        if (!isSpacialShowing) {
-            addSelectionPlane();
-            showOptions(9);
-            isSpacialShowing = true;
-        } else {
-            close();
-        }
-    }
-
-    private void showOptions(int count) {
+    private void showOptions() {
+        int optionCount = options.size();
         float degreesperoption;
 
-        if (count < 7) {
-            degreesperoption = FastMath.PI / (count - 1);
+        if (optionCount < 7) {
+            degreesperoption = FastMath.PI / (optionCount - 1);
         } else {
-            degreesperoption = 2 * FastMath.PI / (count - 1);
+            degreesperoption = 2 * FastMath.PI / (optionCount - 1);
         }
 
         Quaternion q = new Quaternion();
         q.fromAngleAxis(degreesperoption, Vector3f.UNIT_X);
 
-        for (int i = 0; i < count; i++) {
-            // Node option = new Node();
+        int i = 0;
+        for (Geometry option : options) {
 
-            float length = 0.5f;
-            Box b = new Box(length, length, length / 10);
-            Geometry geom = new Geometry("Option" + i, b);
 
-            Material mat = ((Geometry) target).getMaterial().clone();
-            mat.setColor("Color", ColorRGBA.randomColor());
-            geom.setMaterial(mat);
-
-            q.fromAngleAxis(degreesperoption * i - FastMath.PI / 2, Vector3f.UNIT_Z);
+            q.fromAngleAxis(degreesperoption * i++ - FastMath.PI / 2, Vector3f.UNIT_Z);
 
             Vector3f positionVector = Vector3f.UNIT_Y.mult(radius);
             q.multLocal(positionVector);
-            geom.move(positionVector);
 
-            BitmapFont guiFont = app.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
-            BitmapText helloText = new BitmapText(guiFont, false);
-            helloText.setSize(0.2f);
-            helloText.setText(geom.getName());
-            //helloText.setVerticalAlignment(BitmapFont.VAlign.Center);
-            //helloText.setAlignment(BitmapFont.Align.Center);
-            helloText.setLocalTranslation(geom.getLocalTranslation().add(new Vector3f(-length, 0f, length)));
+            option.move(positionVector);
+
+            // option.
 
 
             //OptionSelectionListener optionSelectedListener = new OptionSelectionListener(this);
             //MouseEventControl.addListenersToSpatial(geom, optionSelectedListener);
             //app.getStateManager().attach(optionSelectedListener);
-            options.add(geom);
-            texts.add(helloText);
-            menu.attachChild(geom);
-            menu.attachChild(helloText);
-
+            //options.add(geom);
+            menu.attachChild(option);
+            // menu.attachChild(helloText);
         }
-    }
-
-    @Override
-    boolean isReadyToSelect() {
-        boolean ready = target == null;
-        // System.out.println("Ready? " + ready);
-        return ready;
     }
 
     private void removeOptions() {
         for (Geometry option : options) {
             option.removeFromParent();
+            option.setLocalTranslation(new Vector3f());
         }
-        options.clear();
 
         for (BitmapText text : texts) {
             text.removeFromParent();
         }
         texts.clear();
-    }
-
-    private void addSelectionPlane() {
-        removeSelectionPlane();
-        Cylinder c = new Cylinder(8, 32, 5f, 0.01f, true);
-        disk = new Geometry("disk", c);
-
-        Material mat = ((Geometry) target).getMaterial().clone();
-        mat.setColor("Color", ColorRGBA.randomColor());
-        disk.setMaterial(null);
-        disk.setCullHint(Spatial.CullHint.Always);
-        menu.attachChild(disk);
-
-        CursorEventControl.addListenersToSpatial(disk, new OptionSelectionListener(this));
     }
 
     private void removeSelectionPlane() {
@@ -156,6 +133,51 @@ public class PieMenu extends SpatialSelectionListener {
         removeOptions();
         removeSelectionPlane();
         target = null;
-        isSpacialShowing = false;
+        areOptionsShowing = false;
+    }
+
+    public void addOption(String name, String interfaceLogoMonkeyjpg) {
+
+        float length = 0.5f;
+        Box b = new Box(length, length, length / 10);
+        Geometry geom = new Geometry(name, b);
+
+        Material cube1Mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Texture cube1Tex = app.getAssetManager().loadTexture(
+                "Interface/Logo/Monkey.jpg");
+        cube1Mat.setTexture("ColorMap", cube1Tex);
+        geom.setMaterial(cube1Mat);
+
+
+
+
+        BitmapFont guiFont = app.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+        BitmapText helloText = new BitmapText(guiFont, false);
+        helloText.setSize(0.2f);
+        helloText.setText(geom.getName());
+        //helloText.setVerticalAlignment(BitmapFont.VAlign.Center);
+        //helloText.setAlignment(BitmapFont.Align.Center);
+        helloText.setLocalTranslation(geom.getLocalTranslation().add(new Vector3f(-length, 0f, length)));
+
+
+        //OptionSelectionListener optionSelectedListener = new OptionSelectionListener(this);
+        //MouseEventControl.addListenersToSpatial(geom, optionSelectedListener);
+        //app.getStateManager().attach(optionSelectedListener);
+        options.add(geom);
+
+    }
+    
+      private void addSelectionPlane() {
+        removeSelectionPlane();
+        Cylinder c = new Cylinder(8, 32, 5f, 0.01f, true);
+        disk = new Geometry("disk", c);
+
+        Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.randomColor());
+        disk.setMaterial(mat);
+        disk.setCullHint(Spatial.CullHint.Always);
+        menu.attachChild(disk);
+
+        CursorEventControl.addListenersToSpatial(disk, new OptionSelectionListener(this));
     }
 }

@@ -2,10 +2,13 @@ package tobiasschuerg.lemur.piemenu.example;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.simsilica.lemur.Checkbox;
 import com.simsilica.lemur.Container;
@@ -80,20 +83,24 @@ public class PieMenuExample extends SimpleApplication {
         temp.setChecked(true);
 
 
+        
+        Spatial teapot = assetManager.loadModel("Models/Teapot/Teapot.obj"); 
+        // teapot.move(0f, 1f, 0f);
+        rootNode.attachChild(teapot);
+        
+        //Box b = new Box(1, 1, 1);
+        //Geometry geom = new Geometry("Box", b);
 
-        Box b = new Box(1, 1, 1);
-        Geometry geom = new Geometry("Box", b);
-
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        geom.setMaterial(mat);
-        rootNode.attachChild(geom);
-
-
-        PieMenu pieMenu = new PieMenu(); // create a new pieMenu
-        getStateManager().attach(pieMenu); // attach to get access to the update loop
-        MouseEventControl.addListenersToSpatial(geom, pieMenu); // add menu to spatial
-        rootNode.attachChild(pieMenu.menu);
+        //Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        //mat.setColor("Color", ColorRGBA.Blue);
+        //geom.setMaterial(mat);
+        //rootNode.attachChild(geom);
+        setUpPieMenu(teapot);
+        
+        // You must add a light to make the model visible
+        DirectionalLight sun = new DirectionalLight();
+        sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
+        rootNode.addLight(sun);
 
     }
 
@@ -104,5 +111,15 @@ public class PieMenuExample extends SimpleApplication {
     @Override
     public void simpleRender(RenderManager rm) {
         //TODO: add render code
+    }
+
+    private void setUpPieMenu(Spatial spatial) {
+        PieMenu pieMenu = new PieMenu(this, spatial); // create a new pieMenu
+                        
+        pieMenu.addOption("Copy", "Interface/Logo/Monkey.jpg");
+        pieMenu.addOption("Delete", "Interface/Logo/Monkey.jpg");
+        pieMenu.addOption("Foo", "Interface/Logo/Monkey.jpg");
+        
+        rootNode.attachChild(pieMenu.menu);
     }
 }
