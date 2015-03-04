@@ -120,16 +120,17 @@ public class PieMenuExample extends SimpleApplication {
         pieMenu.addOption("TRANSLATE", "interface/icons/left3.png");
         pieMenu.addOption("ROTATE", "interface/icons/refresh57.png");
 
-        //pieMenu.addOption("SQAURE", "interface/icons/empty40.png");
-        //pieMenu.addOption("CIRCLE", "interface/icons/circle110.png");
+        pieMenu.addOption("SQAURE", "interface/icons/empty40.png");
+        pieMenu.addOption("CIRCLE", "interface/icons/circle110.png");
 
-//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+
     }
 }

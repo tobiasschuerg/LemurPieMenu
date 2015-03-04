@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package tobiasschuerg.lemur.piemenu;
 
 import com.jme3.input.MouseInput;
@@ -17,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * @author Tobias
+ * @author Tobias Schürg
  */
 public class OptionSelectionListener extends DefaultCursorListener {
 
@@ -55,8 +51,7 @@ public class OptionSelectionListener extends DefaultCursorListener {
         closest.getMaterial().setColor("GlowColor", ColorRGBA.Yellow);
 
         if (previousClosest != null && previousClosest != closest) {
-            // remove glowing
-            previousClosest.getMaterial().clearParam("GlowColor");
+            clearGowing();
         }
         previousClosest = closest;
 
@@ -65,6 +60,7 @@ public class OptionSelectionListener extends DefaultCursorListener {
 
     @Override
     public void cursorExited(CursorMotionEvent event, Spatial target, Spatial capture) {
+        clearGowing();
         // pieMenu.close();
     }
 
@@ -92,5 +88,10 @@ public class OptionSelectionListener extends DefaultCursorListener {
             }
         }
         return closest;
+    }
+
+    private void clearGowing() {
+        // remove glowing
+        previousClosest.getMaterial().clearParam("GlowColor");
     }
 }

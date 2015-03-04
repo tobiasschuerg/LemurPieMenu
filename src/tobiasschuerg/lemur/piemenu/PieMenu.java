@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package tobiasschuerg.lemur.piemenu;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
-import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -24,21 +19,18 @@ import com.jme3.scene.shape.Cylinder;
 import com.jme3.texture.Texture;
 import com.simsilica.lemur.event.CursorEventControl;
 import com.simsilica.lemur.event.MouseEventControl;
-import com.simsilica.lemur.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
-import tobiasschuerg.lemur.piemenu.example.PieMenuExample;
 
 /**
  *
- * @author Tobias
+ * @author Tobias Schürg
  */
 public class PieMenu extends AbstractAppState {
 
-    private Spatial target;
     private List<Geometry> options = new ArrayList<Geometry>();
     private List<BitmapText> texts = new ArrayList<BitmapText>();
-    private float radius = 3f;
+    private float radius;
     private Geometry disk;
     public Node menu;
     private boolean areOptionsShowing = false;
@@ -49,18 +41,19 @@ public class PieMenu extends AbstractAppState {
         this.app = app;
         menu = new Node("pie menu");
         spatial.getParent().attachChild(menu);
-        
+        this.radius = 3f;
+
         // for the object glowing
         FilterPostProcessor fpp = new FilterPostProcessor(app.getAssetManager());
         BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
         fpp.addFilter(bloom);
         app.getViewPort().addProcessor(fpp);
-        
+
         selectionListener = new SpatialSelectionListener() {
             @Override
             public void onSpatialSelected(Spatial spatial) {
 
-                if (!areOptionsShowing) {                    
+                if (!areOptionsShowing) {
                     showOptions();
                     addSelectionPlane();
                     areOptionsShowing = true;
@@ -71,7 +64,7 @@ public class PieMenu extends AbstractAppState {
             }
         };
 
-        app.getStateManager().attach(this); // attach to get access to the update loop    
+        app.getStateManager().attach(this); // attach to get access to the update loop
         MouseEventControl.addListenersToSpatial(spatial, selectionListener); // add menu to spatial
     }
 
@@ -85,13 +78,13 @@ public class PieMenu extends AbstractAppState {
         int optionCount = options.size();
         float degreesperoption;
 
-        float offset; 
+        float offset;
         if (optionCount < 4) {
             degreesperoption = FastMath.PI / 2 / (optionCount - 1);
-            offset = - FastMath.PI / 4;
+            offset = -FastMath.PI / 4;
         } else if (optionCount < 6) {
             degreesperoption = FastMath.PI / (optionCount - 1);
-            offset = - FastMath.PI / 2;
+            offset = -FastMath.PI / 2;
         } else {
             degreesperoption = 2 * FastMath.PI / optionCount;
             offset = 0;
@@ -105,7 +98,7 @@ public class PieMenu extends AbstractAppState {
 
             q.fromAngleAxis(offset + degreesperoption * i++, Vector3f.UNIT_Z);
 
-            Vector3f positionVector = Vector3f.UNIT_Y.mult(radius);
+            Vector3f positionVector = Vector3f.UNIT_Y.mult(getRadius());
             q.multLocal(positionVector);
 
             option.move(positionVector);
@@ -148,7 +141,6 @@ public class PieMenu extends AbstractAppState {
     void close() {
         removeOptions();
         removeSelectionPlane();
-        target = null;
         areOptionsShowing = false;
     }
 
@@ -178,10 +170,10 @@ public class PieMenu extends AbstractAppState {
         //OptionSelectionListener optionSelectedListener = new OptionSelectionListener(this);
         //MouseEventControl.addListenersToSpatial(geom, optionSelectedListener);
         //app.getStateManager().attach(optionSelectedListener);
-        options.add(geom);      
+        options.add(geom);
     }
-    
-      private void addSelectionPlane() {
+
+    private void addSelectionPlane() {
         removeSelectionPlane();
         Cylinder c = new Cylinder(8, 32, 5f, 0.01f, true);
         disk = new Geometry("disk", c);
@@ -193,5 +185,19 @@ public class PieMenu extends AbstractAppState {
         menu.attachChild(disk);
 
         CursorEventControl.addListenersToSpatial(disk, new OptionSelectionListener(this));
+    }
+
+    /**
+     * @return the radius
+     */
+    public float getRadius() {
+        return radius;
+    }
+
+    /**
+     * @param radius the radius to set
+     */
+    public void setRadius(float radius) {
+        this.radius = radius;
     }
 }
