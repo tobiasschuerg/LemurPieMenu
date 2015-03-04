@@ -8,11 +8,14 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.BloomFilter;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -45,6 +48,14 @@ public class PieMenu extends AbstractAppState {
     public PieMenu(Application app, Spatial spatial) {
         this.app = app;
         menu = new Node("pie menu");
+        spatial.getParent().attachChild(menu);
+        
+        // for the object glowing
+        FilterPostProcessor fpp = new FilterPostProcessor(app.getAssetManager());
+        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+        fpp.addFilter(bloom);
+        app.getViewPort().addProcessor(fpp);
+        
         selectionListener = new SpatialSelectionListener() {
             @Override
             public void onSpatialSelected(Spatial spatial) {
@@ -74,10 +85,16 @@ public class PieMenu extends AbstractAppState {
         int optionCount = options.size();
         float degreesperoption;
 
-        if (optionCount < 7) {
+        float offset; 
+        if (optionCount < 4) {
+            degreesperoption = FastMath.PI / 2 / (optionCount - 1);
+            offset = - FastMath.PI / 4;
+        } else if (optionCount < 6) {
             degreesperoption = FastMath.PI / (optionCount - 1);
+            offset = - FastMath.PI / 2;
         } else {
-            degreesperoption = 2 * FastMath.PI / (optionCount - 1);
+            degreesperoption = 2 * FastMath.PI / optionCount;
+            offset = 0;
         }
 
         Quaternion q = new Quaternion();
@@ -86,8 +103,7 @@ public class PieMenu extends AbstractAppState {
         int i = 0;
         for (Geometry option : options) {
 
-
-            q.fromAngleAxis(degreesperoption * i++ - FastMath.PI / 2, Vector3f.UNIT_Z);
+            q.fromAngleAxis(offset + degreesperoption * i++, Vector3f.UNIT_Z);
 
             Vector3f positionVector = Vector3f.UNIT_Y.mult(radius);
             q.multLocal(positionVector);
@@ -136,15 +152,14 @@ public class PieMenu extends AbstractAppState {
         areOptionsShowing = false;
     }
 
-    public void addOption(String name, String interfaceLogoMonkeyjpg) {
+    public void addOption(String name, String texture) {
 
         float length = 0.5f;
         Box b = new Box(length, length, length / 10);
         Geometry geom = new Geometry(name, b);
 
         Material cube1Mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        Texture cube1Tex = app.getAssetManager().loadTexture(
-                "Interface/Logo/Monkey.jpg");
+        Texture cube1Tex = app.getAssetManager().loadTexture(texture);
         cube1Mat.setTexture("ColorMap", cube1Tex);
         geom.setMaterial(cube1Mat);
 
@@ -163,8 +178,7 @@ public class PieMenu extends AbstractAppState {
         //OptionSelectionListener optionSelectedListener = new OptionSelectionListener(this);
         //MouseEventControl.addListenersToSpatial(geom, optionSelectedListener);
         //app.getStateManager().attach(optionSelectedListener);
-        options.add(geom);
-
+        options.add(geom);      
     }
     
       private void addSelectionPlane() {

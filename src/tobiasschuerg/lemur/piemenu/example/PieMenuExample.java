@@ -83,11 +83,11 @@ public class PieMenuExample extends SimpleApplication {
         temp.setChecked(true);
 
 
-        
-        Spatial teapot = assetManager.loadModel("Models/Teapot/Teapot.obj"); 
+
+        Spatial teapot = assetManager.loadModel("Models/Teapot/Teapot.obj");
         // teapot.move(0f, 1f, 0f);
         rootNode.attachChild(teapot);
-        
+
         //Box b = new Box(1, 1, 1);
         //Geometry geom = new Geometry("Box", b);
 
@@ -96,7 +96,7 @@ public class PieMenuExample extends SimpleApplication {
         //geom.setMaterial(mat);
         //rootNode.attachChild(geom);
         setUpPieMenu(teapot);
-        
+
         // You must add a light to make the model visible
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
@@ -115,11 +115,21 @@ public class PieMenuExample extends SimpleApplication {
 
     private void setUpPieMenu(Spatial spatial) {
         PieMenu pieMenu = new PieMenu(this, spatial); // create a new pieMenu
-                        
-        pieMenu.addOption("Copy", "Interface/Logo/Monkey.jpg");
-        pieMenu.addOption("Delete", "Interface/Logo/Monkey.jpg");
-        pieMenu.addOption("Foo", "Interface/Logo/Monkey.jpg");
-        
-        rootNode.attachChild(pieMenu.menu);
+
+        pieMenu.addOption("RESIZE", "interface/icons/increase10.png");
+        pieMenu.addOption("TRANSLATE", "interface/icons/left3.png");
+        pieMenu.addOption("ROTATE", "interface/icons/refresh57.png");
+
+        //pieMenu.addOption("SQAURE", "interface/icons/empty40.png");
+        //pieMenu.addOption("CIRCLE", "interface/icons/circle110.png");
+
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
     }
 }

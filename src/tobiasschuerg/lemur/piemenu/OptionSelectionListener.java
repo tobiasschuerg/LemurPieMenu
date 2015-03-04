@@ -5,6 +5,8 @@
 package tobiasschuerg.lemur.piemenu;
 
 import com.jme3.input.MouseInput;
+import com.jme3.light.AmbientLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
@@ -21,6 +23,7 @@ public class OptionSelectionListener extends DefaultCursorListener {
 
     private final PieMenu pieMenu;
     private boolean isOptionSelected;
+    private Geometry previousClosest;
 
     OptionSelectionListener(PieMenu menu) {
         this.pieMenu = menu;
@@ -42,8 +45,21 @@ public class OptionSelectionListener extends DefaultCursorListener {
     @Override
     public void cursorMoved(CursorMotionEvent event, Spatial target, Spatial capture) {
         Vector3f point = event.getCollision().getContactPoint();
+
         Geometry closest = findClosestOption(point);
         // closest.getMaterial().setColor("Color", ColorRGBA.randomColor());
+
+        AmbientLight ambientLight = new AmbientLight();
+        ambientLight.setColor(ColorRGBA.Yellow);
+        closest.addLight(ambientLight);
+        closest.getMaterial().setColor("GlowColor", ColorRGBA.Yellow);
+
+        if (previousClosest != null && previousClosest != closest) {
+            // remove glowing
+            previousClosest.getMaterial().clearParam("GlowColor");
+        }
+        previousClosest = closest;
+
 
     }
 
