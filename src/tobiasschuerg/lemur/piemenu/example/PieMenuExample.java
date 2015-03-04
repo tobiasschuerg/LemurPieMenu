@@ -2,6 +2,7 @@ package tobiasschuerg.lemur.piemenu.example;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
+import com.jme3.font.BitmapText;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -21,6 +22,7 @@ import com.simsilica.lemur.component.QuadBackgroundComponent;
 import com.simsilica.lemur.event.MouseEventControl;
 import com.simsilica.lemur.style.ElementId;
 import com.simsilica.lemur.style.Styles;
+import tobiasschuerg.lemur.piemenu.AbstractPieMenuCallback;
 import tobiasschuerg.lemur.piemenu.PieMenu;
 
 /**
@@ -82,10 +84,8 @@ public class PieMenuExample extends SimpleApplication {
         temp = panel.addChild(new Checkbox("Show FPS"));
         temp.setChecked(true);
 
-
-
         Spatial teapot = assetManager.loadModel("Models/Teapot/Teapot.obj");
-        // teapot.move(0f, 1f, 0f);
+        teapot.move(0f, -0.25f, 0f);
         rootNode.attachChild(teapot);
 
         //Box b = new Box(1, 1, 1);
@@ -116,21 +116,28 @@ public class PieMenuExample extends SimpleApplication {
     private void setUpPieMenu(Spatial spatial) {
         PieMenu pieMenu = new PieMenu(this, spatial); // create a new pieMenu
 
+        pieMenu.setCallback(new AbstractPieMenuCallback() {
+            @Override
+            public void onOptionSelected(String name) {
+                System.out.println("Selected option: " + name);
+            }
+        });
+
         pieMenu.addOption("RESIZE", "interface/icons/increase10.png");
         pieMenu.addOption("TRANSLATE", "interface/icons/left3.png");
         pieMenu.addOption("ROTATE", "interface/icons/refresh57.png");
 
-        pieMenu.addOption("SQAURE", "interface/icons/empty40.png");
-        pieMenu.addOption("CIRCLE", "interface/icons/circle110.png");
+//        pieMenu.addOption("SQAURE", "interface/icons/empty40.png");
+//        pieMenu.addOption("CIRCLE", "interface/icons/circle110.png");
 
-        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
-        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
+//        pieMenu.addOption("EMPTY", "interface/icons/delete31.png");
 
     }
 }

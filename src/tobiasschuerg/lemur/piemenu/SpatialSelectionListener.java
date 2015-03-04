@@ -6,12 +6,7 @@ package tobiasschuerg.lemur.piemenu;
 
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Cylinder;
-import com.simsilica.lemur.event.CursorEventControl;
 import com.simsilica.lemur.event.DefaultMouseListener;
 
 /**
@@ -44,5 +39,4 @@ public abstract class SpatialSelectionListener extends DefaultMouseListener {
     }
 
     abstract public void onSpatialSelected(Spatial spatial);
-
 }

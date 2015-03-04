@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Tobias Schürg
  */
-public class OptionSelectionListener extends DefaultCursorListener {
+public abstract class OptionSelectionListener extends DefaultCursorListener {
 
     private final PieMenu pieMenu;
     private boolean isOptionSelected;
@@ -68,8 +68,7 @@ public class OptionSelectionListener extends DefaultCursorListener {
     public void onSpatialSelected(Spatial spatial) {
         if (!isOptionSelected) { // to only trigger selection once!
             isOptionSelected = true;
-            System.out.println("Selected: " + spatial.getName());
-            // onOptionSelected();
+            onOptionSelected(spatial.getName());
             pieMenu.close();
         }
     }
@@ -94,4 +93,6 @@ public class OptionSelectionListener extends DefaultCursorListener {
         // remove glowing
         previousClosest.getMaterial().clearParam("GlowColor");
     }
+
+    abstract public void onOptionSelected(String name);
 }

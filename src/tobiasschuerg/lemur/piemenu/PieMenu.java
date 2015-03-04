@@ -36,6 +36,7 @@ public class PieMenu extends AbstractAppState {
     private boolean areOptionsShowing = false;
     private final Application app;
     private final SpatialSelectionListener selectionListener;
+    private AbstractPieMenuCallback callback;
 
     public PieMenu(Application app, Spatial spatial) {
         this.app = app;
@@ -184,7 +185,12 @@ public class PieMenu extends AbstractAppState {
         disk.setCullHint(Spatial.CullHint.Always);
         menu.attachChild(disk);
 
-        CursorEventControl.addListenersToSpatial(disk, new OptionSelectionListener(this));
+        CursorEventControl.addListenersToSpatial(disk, new OptionSelectionListener(this) {
+            @Override
+            public void onOptionSelected(String name) {
+                System.out.println("Selected option: " + name);
+            }
+        });
     }
 
     /**
@@ -199,5 +205,9 @@ public class PieMenu extends AbstractAppState {
      */
     public void setRadius(float radius) {
         this.radius = radius;
+    }
+
+    public void setCallback(AbstractPieMenuCallback abstractPieMenuCallback) {
+        this.callback = abstractPieMenuCallback;
     }
 }
