@@ -37,11 +37,13 @@ public class PieMenu extends AbstractAppState {
     private final Application app;
     private final SpatialSelectionListener selectionListener;
     private AbstractPieMenuCallback callback;
+    private float buttonSize = 0.5f;
 
     public PieMenu(Application app, Spatial spatial) {
         this.app = app;
         menu = new Node("pie menu");
         spatial.getParent().attachChild(menu);
+        menu.setLocalTranslation(spatial.getLocalTranslation());
         this.radius = 3f;
 
         // for the object glowing
@@ -103,6 +105,8 @@ public class PieMenu extends AbstractAppState {
             q.multLocal(positionVector);
 
             option.move(positionVector);
+            // option.move(new Vector3f(0f, 0f, 0.5f));
+
 
             // option.
 
@@ -147,8 +151,7 @@ public class PieMenu extends AbstractAppState {
 
     public void addOption(String name, String texture) {
 
-        float length = 0.5f;
-        Box b = new Box(length, length, length / 10);
+        Box b = new Box(buttonSize, buttonSize, buttonSize / 10);
         Geometry geom = new Geometry(name, b);
 
         Material cube1Mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
@@ -159,13 +162,13 @@ public class PieMenu extends AbstractAppState {
 
 
 
-        BitmapFont guiFont = app.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
-        BitmapText helloText = new BitmapText(guiFont, false);
-        helloText.setSize(0.2f);
-        helloText.setText(geom.getName());
+        // BitmapFont guiFont = app.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+        //BitmapText helloText = new BitmapText(guiFont, false);
+        //helloText.setSize(0.2f);
+        //helloText.setText(geom.getName());
         //helloText.setVerticalAlignment(BitmapFont.VAlign.Center);
         //helloText.setAlignment(BitmapFont.Align.Center);
-        helloText.setLocalTranslation(geom.getLocalTranslation().add(new Vector3f(-length, 0f, length)));
+        //helloText.setLocalTranslation(geom.getLocalTranslation().add(new Vector3f(-3 * buttonSize, 0f, buttonSize)));
 
 
         //OptionSelectionListener optionSelectedListener = new OptionSelectionListener(this);
@@ -209,5 +212,9 @@ public class PieMenu extends AbstractAppState {
 
     public void setCallback(AbstractPieMenuCallback abstractPieMenuCallback) {
         this.callback = abstractPieMenuCallback;
+    }
+
+    public void setButtonSize(float f) {
+        this.buttonSize = f;
     }
 }
