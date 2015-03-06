@@ -82,14 +82,6 @@ public class PieMenuExample extends SimpleApplication {
         Spatial teapot = assetManager.loadModel("Models/Teapot/Teapot.obj");
         teapot.move(0f, -0.25f, 0f);
         rootNode.attachChild(teapot);
-
-        //Box b = new Box(1, 1, 1);
-        //Geometry geom = new Geometry("Box", b);
-
-        //Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        //mat.setColor("Color", ColorRGBA.Blue);
-        //geom.setMaterial(mat);
-        //rootNode.attachChild(geom);
         setUpPieMenu(teapot);
 
         // You must add a light to make the model visible
