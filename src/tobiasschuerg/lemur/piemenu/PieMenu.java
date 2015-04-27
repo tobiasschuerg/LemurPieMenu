@@ -2,7 +2,6 @@ package tobiasschuerg.lemur.piemenu;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
-import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
