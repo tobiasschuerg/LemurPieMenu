@@ -90,14 +90,19 @@ public class PieMenuExample extends SimpleApplication {
             }
         });
 
-        pieMenu.addOption("PLACE", "interface/icons/increase10.png");
-        pieMenu.addOption("MAGNET", "interface/icons/left3.png");
+        pieMenu.addOption("PLACE", ColorRGBA.Red);
+        pieMenu.addOption("FOO", ColorRGBA.Green);
+        pieMenu.addOption("BAR", ColorRGBA.Blue);
 
-        pieMenu.addOption("SCALE", "interface/icons/circle110.png");
 
-        pieMenu.addOption("ROTATE_Y", "interface/icons/refresh57.png");
-        // pieMenu.addOption("ROTATE_HANDLE", "interface/icons/empty40.png");
-
-        pieMenu.addOption("CLOSE", "interface/icons/delete31.png");
+//        pieMenu.addOption("PLACE", "interface/icons/increase10.png");
+//        pieMenu.addOption("MAGNET", "interface/icons/left3.png");
+//
+//        pieMenu.addOption("SCALE", "interface/icons/circle110.png");
+//
+//        pieMenu.addOption("ROTATE_Y", "interface/icons/refresh57.png");
+//        // pieMenu.addOption("ROTATE_HANDLE", "interface/icons/empty40.png");
+//
+//        pieMenu.addOption("CLOSE", "interface/icons/delete31.png");
     }
 }

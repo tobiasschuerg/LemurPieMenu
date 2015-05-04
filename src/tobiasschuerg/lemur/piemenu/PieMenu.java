@@ -144,17 +144,31 @@ public class PieMenu extends AbstractAppState {
         areOptionsShowing = false;
     }
 
-    public void addOption(String name, String texture) {
+    public void addOption(String name, ColorRGBA color) {
 
         Box b = new Box(buttonSize, buttonSize, buttonSize / 10);
         Geometry geom = new Geometry(name, b);
-
-        Material cube1Mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        Texture cube1Tex = app.getAssetManager().loadTexture(texture);
-        cube1Mat.setTexture("ColorMap", cube1Tex);
-        geom.setMaterial(cube1Mat);
+        Material material = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        material.setColor("Color", color);
+        geom.setMaterial(material);
 
         options.add(geom);
+    }
+
+    public void addOption(String name, Texture texture) {
+
+        Box b = new Box(buttonSize, buttonSize, buttonSize / 10);
+        Geometry geom = new Geometry(name, b);
+        Material material = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        material.setTexture("ColorMap", texture);
+        geom.setMaterial(material);
+
+        options.add(geom);
+    }
+
+    public void addOption(String name, String texturePath) {
+        Texture texture = app.getAssetManager().loadTexture(texturePath);
+        addOption(name, texture);
     }
 
     private void addSelectionPlane() {
