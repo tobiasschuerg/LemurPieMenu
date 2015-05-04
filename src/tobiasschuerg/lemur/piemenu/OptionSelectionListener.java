@@ -12,6 +12,7 @@ import com.simsilica.lemur.event.DefaultCursorListener;
 import java.util.List;
 
 /**
+ * Listener for handling object selection.
  *
  * @author Tobias Schürg
  */
@@ -19,7 +20,7 @@ public abstract class OptionSelectionListener extends DefaultCursorListener {
 
     private final PieMenu pieMenu;
     private boolean isOptionSelected;
-    private Geometry previousClosest;
+    private Geometry currentlyActive;
 
     OptionSelectionListener(PieMenu menu) {
         this.pieMenu = menu;
@@ -33,29 +34,15 @@ public abstract class OptionSelectionListener extends DefaultCursorListener {
         }
 
         if (!event.isPressed()) {
-            System.out.println("Selected: " + closest.getName());
-            pieMenu.close();
+            System.out.println("Closest: " + currentlyActive.getName());
+            // onSpatialSelected(currentlyActive);
         }
     }
 
     @Override
     public void cursorMoved(CursorMotionEvent event, Spatial target, Spatial capture) {
         Vector3f point = event.getCollision().getContactPoint();
-
-        Geometry closest = findClosestOption(point);
-        // closest.getMaterial().setColor("Color", ColorRGBA.randomColor());
-
-        AmbientLight ambientLight = new AmbientLight();
-        ambientLight.setColor(ColorRGBA.Yellow);
-        closest.addLight(ambientLight);
-        closest.getMaterial().setColor("GlowColor", ColorRGBA.Yellow);
-
-        if (previousClosest != null && previousClosest != closest) {
-            clearGowing();
-        }
-        previousClosest = closest;
-
-
+        // processPoint(point);
     }
 
     @Override
@@ -64,20 +51,23 @@ public abstract class OptionSelectionListener extends DefaultCursorListener {
         // pieMenu.close();
     }
 
-    // @Override
-    public void onSpatialSelected(Spatial spatial) {
+    private void onSpatialSelected(Spatial spatial) {
         if (!isOptionSelected) { // to only trigger selection once!
             isOptionSelected = true;
             onOptionSelected(spatial.getName());
             pieMenu.close();
         }
     }
-    private Geometry closest;
 
     private Geometry findClosestOption(Vector3f point) {
         List<Geometry> options = pieMenu.getOptions();
 
         float closestDistance = 1000;
+        Geometry closest = null;
+
+        if (!pieMenu.isOpen()) {
+            return null;
+        }
 
         for (Geometry option : options) {
             float distance = point.distance(option.getWorldTranslation());
@@ -89,10 +79,41 @@ public abstract class OptionSelectionListener extends DefaultCursorListener {
         return closest;
     }
 
-    private void clearGowing() {
-        // remove glowing
-        previousClosest.getMaterial().clearParam("GlowColor");
+    abstract public void onOptionSelected(String name);
+
+    private void highlightOption(Geometry closestOption) {
+        if (currentlyActive != null && currentlyActive != closestOption) {
+            clearGowing();
+        }
+        setActive(closestOption);
     }
 
-    abstract public void onOptionSelected(String name);
+    public Geometry processPoint(Vector3f center) {
+        Geometry option = findClosestOption(center);
+        if (option != null) {
+            highlightOption(option);
+        }
+        return option;
+    }
+
+    /**
+     * removes glowing from geometry.
+     */
+    private void clearGowing() {
+        // remove glowing
+        currentlyActive.getMaterial().clearParam("GlowColor");
+    }
+
+    /**
+     * adds glowing to geometry.
+     *
+     * @param closestOption
+     */
+    private void setActive(Geometry closestOption) {
+        AmbientLight ambientLight = new AmbientLight();
+        ambientLight.setColor(ColorRGBA.Yellow);
+        closestOption.addLight(ambientLight);
+        closestOption.getMaterial().setColor("GlowColor", ColorRGBA.Yellow);
+        currentlyActive = closestOption;
+    }
 }

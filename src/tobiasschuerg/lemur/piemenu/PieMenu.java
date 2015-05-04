@@ -37,6 +37,12 @@ public class PieMenu extends AbstractAppState {
     private final SpatialSelectionListener selectionListener;
     private AbstractPieMenuCallback callback;
     private float buttonSize = 0.5f;
+    private OptionSelectionListener optionSelectionListener = new OptionSelectionListener(this) {
+        @Override
+        public void onOptionSelected(String name) {
+            callback.onOptionSelected(name);
+        }
+    };
 
     public PieMenu(Application app, Spatial spatial) {
         this.app = app;
@@ -104,18 +110,8 @@ public class PieMenu extends AbstractAppState {
             q.multLocal(positionVector);
 
             option.move(positionVector);
-            // option.move(new Vector3f(0f, 0f, 0.5f));
 
-
-            // option.
-
-
-            //OptionSelectionListener optionSelectedListener = new OptionSelectionListener(this);
-            //MouseEventControl.addListenersToSpatial(geom, optionSelectedListener);
-            //app.getStateManager().attach(optionSelectedListener);
-            //options.add(geom);
             menu.attachChild(option);
-            // menu.attachChild(helloText);
         }
     }
 
@@ -158,21 +154,6 @@ public class PieMenu extends AbstractAppState {
         cube1Mat.setTexture("ColorMap", cube1Tex);
         geom.setMaterial(cube1Mat);
 
-
-
-
-        // BitmapFont guiFont = app.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
-        //BitmapText helloText = new BitmapText(guiFont, false);
-        //helloText.setSize(0.2f);
-        //helloText.setText(geom.getName());
-        //helloText.setVerticalAlignment(BitmapFont.VAlign.Center);
-        //helloText.setAlignment(BitmapFont.Align.Center);
-        //helloText.setLocalTranslation(geom.getLocalTranslation().add(new Vector3f(-3 * buttonSize, 0f, buttonSize)));
-
-
-        //OptionSelectionListener optionSelectedListener = new OptionSelectionListener(this);
-        //MouseEventControl.addListenersToSpatial(geom, optionSelectedListener);
-        //app.getStateManager().attach(optionSelectedListener);
         options.add(geom);
     }
 
@@ -187,12 +168,7 @@ public class PieMenu extends AbstractAppState {
         disk.setCullHint(Spatial.CullHint.Always);
         menu.attachChild(disk);
 
-        CursorEventControl.addListenersToSpatial(disk, new OptionSelectionListener(this) {
-            @Override
-            public void onOptionSelected(String name) {
-                System.out.println("Selected option: " + name);
-            }
-        });
+        CursorEventControl.addListenersToSpatial(disk, optionSelectionListener);
     }
 
     /**
@@ -209,11 +185,21 @@ public class PieMenu extends AbstractAppState {
         this.radius = radius;
     }
 
-    public void setCallback(AbstractPieMenuCallback abstractPieMenuCallback) {
-        this.callback = abstractPieMenuCallback;
+    public void setCallback(AbstractPieMenuCallback callback) {
+        this.callback = callback;
     }
 
     public void setButtonSize(float f) {
         this.buttonSize = f;
+    }
+
+    public Geometry checkSelection(Geometry box) {
+        Vector3f center = box.getWorldTranslation();
+        Geometry option = optionSelectionListener.processPoint(center);
+        return option;
+    }
+
+    boolean isOpen() {
+        return areOptionsShowing;
     }
 }
